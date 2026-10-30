@@ -1,3 +1,4 @@
+import AppKit
 import Foundation
 import Observation
 
@@ -6,6 +7,10 @@ import Observation
 final class AppState {
     var selectedMode: ReadingMode = .plain
     var lastText: String = ""
+
+    /// Pfad des zuletzt exportierten `.m4a` — damit der Menü-Bar-Eintrag
+    /// „im Finder zeigen" einen Angriffspunkt hat.
+    var lastExportURL: URL?
 
     /// Live-Status während der Wiedergabe. Beobachtet die Lesepille.
     let progress = ReadingProgress()
@@ -17,6 +22,7 @@ final class AppState {
     let speech = SpeechService()
     private let hotkeys = HotkeyService()
     private let pill = ReadingPillController()
+    private let export = AudioExportService()
     private var tokens: [ReadingMode: HotkeyService.Token] = [:]
 
     var isReading: Bool { progress.isReading }
@@ -31,23 +37,23 @@ final class AppState {
         registerAllHotkeys()
     }
 
-    // MARK: - Lesen
+    // MARK: - Lesen und Exportieren
 
     func read(_ text: String, mode: ReadingMode) {
         lastText = text
         selectedMode = mode
-        progress.start(mode: mode, text: text)
-        pill.show()
-        speech.speak(text) { [weak self] in
-            Task { @MainActor in
-                self?.progress.stop()
-                self?.pill.hide()
-            }
+
+        switch mode {
+        case .plain, .smoothed, .summary:
+            startSpeech(text: text, mode: mode)
+        case .export:
+            startExport(text: text)
         }
     }
 
     func stop() {
         speech.stop()
+        export.cancel()
         progress.stop()
         pill.hide()
     }
@@ -85,6 +91,39 @@ final class AppState {
     func setShortcut(_ shortcut: HotkeyShortcut, for mode: ReadingMode) {
         shortcuts[mode] = shortcut
         registerAllHotkeys()
+    }
+
+    // MARK: - Private
+
+    private func startSpeech(text: String, mode: ReadingMode) {
+        progress.start(mode: mode, text: text)
+        pill.show()
+        speech.speak(text) { [weak self] in
+            Task { @MainActor in
+                self?.progress.stop()
+                self?.pill.hide()
+            }
+        }
+    }
+
+    private func startExport(text: String) {
+        let url = ExportLocation.defaultURL()
+        progress.start(mode: .export, text: text)
+        pill.show()
+        export.export(text, to: url) { [weak self] result in
+            Task { @MainActor in
+                guard let self else { return }
+                self.progress.stop()
+                self.pill.hide()
+                switch result {
+                case .success(let fileURL):
+                    self.lastExportURL = fileURL
+                    NSWorkspace.shared.activateFileViewerSelecting([fileURL])
+                case .failure(let error):
+                    NSLog("Blitzsprecher: Export fehlgeschlagen — \(error.localizedDescription)")
+                }
+            }
+        }
     }
 }
 

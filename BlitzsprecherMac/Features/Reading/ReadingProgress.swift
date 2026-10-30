@@ -58,8 +58,15 @@ final class ReadingProgress {
     // MARK: - Abgeleitete Werte
 
     var progress: Double {
-        guard totalChars > 0 else { return 0 }
-        return min(1.0, Double(charLocation) / Double(totalChars))
+        if charLocation > 0, totalChars > 0 {
+            return min(1.0, Double(charLocation) / Double(totalChars))
+        }
+        // Fallback für den Export-Modus und andere Wege, die kein
+        // `willSpeakRangeOfSpeechString` liefern: zeit-basierter Verlauf.
+        if estimatedTotal > 0 {
+            return min(1.0, elapsed / estimatedTotal)
+        }
+        return 0
     }
 
     var timeLabel: String {
