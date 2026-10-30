@@ -1,16 +1,20 @@
 import AVFoundation
 import Foundation
 
-/// Hält `AVSpeechSynthesizer`, kümmert sich um Stimmwahl und Fertig-Callback.
+/// Hält `AVSpeechSynthesizer`, kümmert sich um Stimmwahl, Fertig-Callback
+/// und meldet Zeichen-Fortschritt an die Lesepille.
 ///
 /// Mehrere TODOs für die nächsten Iterationen:
 /// - Stimm-Auswahl aus den Settings übernehmen
-/// - Fortschritt (`willSpeakRangeOfSpeechString`) an die Lesepille melden
 /// - Audio-Export über `write(_:toBufferCallback:)` in eine `.m4a`
 @MainActor
 final class SpeechService: NSObject {
     private let synthesizer = AVSpeechSynthesizer()
     private var finished: (() -> Void)?
+
+    /// Wird bei jedem `willSpeakRangeOfSpeechString` mit der Zeichen-Position
+    /// des Range-Endes aufgerufen. Für die Fortschritts-Anzeige der Pille.
+    var onProgress: ((Int) -> Void)?
 
     override init() {
         super.init()
@@ -33,6 +37,15 @@ final class SpeechService: NSObject {
 }
 
 extension SpeechService: AVSpeechSynthesizerDelegate {
+    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer,
+                                       willSpeakRangeOfSpeechString characterRange: NSRange,
+                                       utterance: AVSpeechUtterance) {
+        let location = characterRange.location + characterRange.length
+        Task { @MainActor in
+            self.onProgress?(location)
+        }
+    }
+
     nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer,
                                        didFinish utterance: AVSpeechUtterance) {
         Task { @MainActor in

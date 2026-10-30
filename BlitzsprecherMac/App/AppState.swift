@@ -6,8 +6,9 @@ import Observation
 final class AppState {
     var selectedMode: ReadingMode = .plain
     var lastText: String = ""
-    var isReading: Bool = false
-    var currentProgress: Double = 0
+
+    /// Live-Status während der Wiedergabe. Beobachtet die Lesepille.
+    let progress = ReadingProgress()
 
     /// Shortcuts pro Modus. Einstiegspunkt für die Settings-UI; aktuell
     /// liest `AppState` beim Start die Defaults aus `HotkeyShortcut.defaults`.
@@ -15,9 +16,18 @@ final class AppState {
 
     let speech = SpeechService()
     private let hotkeys = HotkeyService()
+    private let pill = ReadingPillController()
     private var tokens: [ReadingMode: HotkeyService.Token] = [:]
 
+    var isReading: Bool { progress.isReading }
+
     init() {
+        pill.attach(progress: progress) { [weak self] in
+            self?.stop()
+        }
+        speech.onProgress = { [weak self] location in
+            self?.progress.updateLocation(location)
+        }
         registerAllHotkeys()
     }
 
@@ -26,17 +36,20 @@ final class AppState {
     func read(_ text: String, mode: ReadingMode) {
         lastText = text
         selectedMode = mode
-        isReading = true
+        progress.start(mode: mode, text: text)
+        pill.show()
         speech.speak(text) { [weak self] in
             Task { @MainActor in
-                self?.isReading = false
+                self?.progress.stop()
+                self?.pill.hide()
             }
         }
     }
 
     func stop() {
         speech.stop()
-        isReading = false
+        progress.stop()
+        pill.hide()
     }
 
     /// Vom Hotkey ausgelöst: liest den aktuell markierten Text im Modus `mode`.
