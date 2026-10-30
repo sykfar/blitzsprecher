@@ -3,10 +3,18 @@ import XCTest
 
 final class MeridianTokensTests: XCTestCase {
 
-    func test_modes_have_distinct_shortcuts() {
-        let shortcuts = ReadingMode.allCases.map(\.shortcut)
+    func test_default_shortcuts_cover_all_modes_and_are_distinct() {
+        let shortcuts = ReadingMode.allCases.compactMap { HotkeyShortcut.defaults[$0] }
+        XCTAssertEqual(shortcuts.count, ReadingMode.allCases.count,
+                       "Jeder Modus braucht einen Default-Shortcut.")
         XCTAssertEqual(Set(shortcuts).count, shortcuts.count,
-                       "Jeder Modus braucht einen eigenen Shortcut.")
+                       "Default-Shortcuts müssen eindeutig sein.")
+    }
+
+    func test_shortcut_description_renders_modifiers() {
+        let s = HotkeyShortcut(keyCode: 18, // kVK_ANSI_1
+                               modifiers: HotkeyShortcut.defaultModifiers)
+        XCTAssertEqual(s.description, "⌃⌥⌘1")
     }
 
     func test_modes_have_names() {

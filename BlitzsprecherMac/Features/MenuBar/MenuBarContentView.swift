@@ -9,14 +9,23 @@ struct MenuBarContentView: View {
 
             VStack(spacing: 2) {
                 ForEach(ReadingMode.allCases) { mode in
-                    ModeRow(mode: mode, isActive: state.selectedMode == mode) {
+                    ModeRow(
+                        mode: mode,
+                        shortcut: state.shortcuts[mode],
+                        isActive: state.selectedMode == mode
+                    ) {
                         state.selectedMode = mode
+                        state.readSelection(in: mode)
                     }
                 }
             }
 
             if !state.lastText.isEmpty {
                 lastRow
+            }
+
+            if !PermissionsService.hasAccessibility {
+                accessibilityHint
             }
 
             Divider()
@@ -41,7 +50,8 @@ struct MenuBarContentView: View {
 
     private var readButton: some View {
         Button {
-            demoRead()
+            if state.isReading { state.stop() }
+            else { state.readSelection(in: state.selectedMode) }
         } label: {
             Circle()
                 .fill(Meridian.Palette.fathom)
@@ -82,13 +92,32 @@ struct MenuBarContentView: View {
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 
-    private func demoRead() {
-        if state.isReading {
-            state.stop()
-        } else {
-            state.read("Der Herbstwald riecht nach feuchtem Laub, als ich das Buch aufschlage.",
-                       mode: state.selectedMode)
+    private var accessibilityHint: some View {
+        Button {
+            PermissionsService.requestAccessibility()
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(Meridian.Palette.sienna)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Markierten Text lesen")
+                        .font(Meridian.Typo.sans(12, weight: .semibold))
+                        .foregroundStyle(Meridian.Palette.ink)
+                    Text("Berechtigung für Bedienungshilfen erteilen")
+                        .font(Meridian.Typo.sans(11))
+                        .foregroundStyle(Meridian.Palette.ink3)
+                }
+                Spacer()
+            }
+            .padding(10)
+            .background(Meridian.Palette.paper2)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Meridian.Palette.sienna.opacity(0.4), lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 8))
         }
+        .buttonStyle(.plain)
     }
 
     private func openSettings() {

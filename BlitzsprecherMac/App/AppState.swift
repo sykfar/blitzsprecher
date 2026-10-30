@@ -9,7 +9,19 @@ final class AppState {
     var isReading: Bool = false
     var currentProgress: Double = 0
 
+    /// Shortcuts pro Modus. Einstiegspunkt für die Settings-UI; aktuell
+    /// liest `AppState` beim Start die Defaults aus `HotkeyShortcut.defaults`.
+    var shortcuts: [ReadingMode: HotkeyShortcut] = HotkeyShortcut.defaults
+
     let speech = SpeechService()
+    private let hotkeys = HotkeyService()
+    private var tokens: [ReadingMode: HotkeyService.Token] = [:]
+
+    init() {
+        registerAllHotkeys()
+    }
+
+    // MARK: - Lesen
 
     func read(_ text: String, mode: ReadingMode) {
         lastText = text
@@ -25,6 +37,41 @@ final class AppState {
     func stop() {
         speech.stop()
         isReading = false
+    }
+
+    /// Vom Hotkey ausgelöst: liest den aktuell markierten Text im Modus `mode`.
+    /// Fehlt die Auswahl (etwa weil die Accessibility-Berechtigung fehlt),
+    /// nimmt die App einen Beispielsatz, damit der Hotkey sichtbar reagiert.
+    func readSelection(in mode: ReadingMode) {
+        let text = SelectionReader.currentSelection()
+                   ?? "Hier würde Blitzsprecher den markierten Text vorlesen."
+        read(text, mode: mode)
+    }
+
+    // MARK: - Hotkeys
+
+    func registerAllHotkeys() {
+        unregisterAllHotkeys()
+        for mode in ReadingMode.allCases {
+            guard let shortcut = shortcuts[mode] else { continue }
+            let token = hotkeys.register(shortcut) { [weak self] in
+                self?.readSelection(in: mode)
+            }
+            if let token { tokens[mode] = token }
+        }
+    }
+
+    func unregisterAllHotkeys() {
+        for token in tokens.values {
+            hotkeys.unregister(token)
+        }
+        tokens.removeAll()
+    }
+
+    /// Setzt für `mode` einen neuen Shortcut und meldet die Hotkeys neu an.
+    func setShortcut(_ shortcut: HotkeyShortcut, for mode: ReadingMode) {
+        shortcuts[mode] = shortcut
+        registerAllHotkeys()
     }
 }
 
@@ -51,15 +98,6 @@ enum ReadingMode: String, CaseIterable, Identifiable {
         case .smoothed: "Text erst glätten, dann vorlesen"
         case .export:   "Als Audio-Datei ablegen"
         case .summary:  "Lange Texte: Zusammenfassung vorlesen"
-        }
-    }
-
-    var shortcut: String {
-        switch self {
-        case .plain:    "fn ⇧"
-        case .smoothed: "fn ⌃"
-        case .export:   "fn ⌥"
-        case .summary:  "fn ⌘"
         }
     }
 }

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ModeRow: View {
     let mode: ReadingMode
+    let shortcut: HotkeyShortcut?
     let isActive: Bool
     let onTap: () -> Void
 
@@ -24,17 +25,19 @@ struct ModeRow: View {
 
                 Spacer()
 
-                Text(mode.shortcut)
-                    .font(Meridian.Typo.mono(10))
-                    .foregroundStyle(Meridian.Palette.ink2)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(Meridian.Palette.paper2)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 4)
-                            .stroke(Meridian.Palette.lineStrong, lineWidth: 1)
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                if let shortcut {
+                    Text(shortcut.description)
+                        .font(Meridian.Typo.mono(10))
+                        .foregroundStyle(Meridian.Palette.ink2)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Meridian.Palette.paper2)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4)
+                                .stroke(Meridian.Palette.lineStrong, lineWidth: 1)
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                }
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
