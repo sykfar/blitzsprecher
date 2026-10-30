@@ -87,22 +87,66 @@ private struct ModesTab: View {
 }
 
 private struct StorageTab: View {
+    @Environment(AppState.self) private var state
+
     var body: some View {
         Form {
-            Section("Vault") {
-                Text("Pfad zum Obsidian-Vault, Audio-Unterordner, Verlinkungs-Regel.")
+            Section {
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Vault-Ordner")
+                            .font(Meridian.Typo.sans(13, weight: .semibold))
+                        if let root = state.vault.vaultRoot {
+                            Text(root.path)
+                                .font(Meridian.Typo.mono(11))
+                                .foregroundStyle(Meridian.Palette.ink2)
+                                .lineLimit(1)
+                                .truncationMode(.middle)
+                        } else {
+                            Text("Noch nicht gewählt")
+                                .font(Meridian.Typo.sans(11))
+                                .foregroundStyle(Meridian.Palette.ink3)
+                        }
+                    }
+                    Spacer()
+                    Button("Ändern …") {
+                        Task { await state.vault.chooseVault() }
+                    }
+                }
+                HStack {
+                    Text("Audio-Unterordner")
+                        .font(Meridian.Typo.sans(12))
+                        .foregroundStyle(Meridian.Palette.ink2)
+                    Spacer()
+                    Text(state.vault.audioSubfolder)
+                        .font(Meridian.Typo.mono(11))
+                        .foregroundStyle(Meridian.Palette.ink)
+                }
+                HStack {
+                    Text("Daily-Notes-Ordner")
+                        .font(Meridian.Typo.sans(12))
+                        .foregroundStyle(Meridian.Palette.ink2)
+                    Spacer()
+                    Text(state.vault.dailyNotesFolder)
+                        .font(Meridian.Typo.mono(11))
+                        .foregroundStyle(Meridian.Palette.ink)
+                }
+            } header: {
+                Text("Vault")
+                    .font(Meridian.Typo.sans(13, weight: .semibold))
+            } footer: {
+                Text("Die Audio-Datei landet im Audio-Unterordner des Vaults, die Verlinkung in der Daily Note des Tages.")
+                    .font(Meridian.Typo.sans(11))
                     .foregroundStyle(Meridian.Palette.ink3)
-                    .font(Meridian.Typo.sans(12))
             }
-            Section("Website") {
-                Text("Ghost-API, Upload-Pfad für Audio-Dateien.")
-                    .foregroundStyle(Meridian.Palette.ink3)
+
+            Section {
+                Text("GitHub (Repo + Release-Asset) und Website (Ghost-API) kommen in einer späteren Welle. Das Mockup zeigt die Ziele, der Dialog markiert sie heute als Später.")
                     .font(Meridian.Typo.sans(12))
-            }
-            Section("GitHub") {
-                Text("Repository, Release-Asset oder Issue.")
                     .foregroundStyle(Meridian.Palette.ink3)
-                    .font(Meridian.Typo.sans(12))
+            } header: {
+                Text("Weitere Ziele")
+                    .font(Meridian.Typo.sans(13, weight: .semibold))
             }
         }
         .padding(20)

@@ -8,8 +8,8 @@ final class AppState {
     var selectedMode: ReadingMode = .plain
     var lastText: String = ""
 
-    /// Pfad des zuletzt exportierten `.m4a` — damit der Menü-Bar-Eintrag
-    /// „im Finder zeigen" einen Angriffspunkt hat.
+    /// Pfad des zuletzt in den Vault abgelegten `.m4a` — damit der Menü-Bar-
+    /// Eintrag „im Finder zeigen" einen Angriffspunkt hat.
     var lastExportURL: URL?
 
     /// Live-Status während der Wiedergabe. Beobachtet die Lesepille.
@@ -20,9 +20,11 @@ final class AppState {
     var shortcuts: [ReadingMode: HotkeyShortcut] = HotkeyShortcut.defaults
 
     let speech = SpeechService()
+    let vault = VaultStorage()
     private let hotkeys = HotkeyService()
     private let pill = ReadingPillController()
     private let export = AudioExportService()
+    private let dialog = ExportDialogController()
     private var tokens: [ReadingMode: HotkeyService.Token] = [:]
 
     var isReading: Bool { progress.isReading }
@@ -117,12 +119,38 @@ final class AppState {
                 self.pill.hide()
                 switch result {
                 case .success(let fileURL):
-                    self.lastExportURL = fileURL
-                    NSWorkspace.shared.activateFileViewerSelecting([fileURL])
+                    self.presentExportDialog(fileURL: fileURL, text: text)
                 case .failure(let error):
                     NSLog("Blitzsprecher: Export fehlgeschlagen — \(error.localizedDescription)")
                 }
             }
+        }
+    }
+
+    private func presentExportDialog(fileURL: URL, text: String) {
+        let meta = ExportResult(url: fileURL, text: text, mode: .export, createdAt: Date())
+        dialog.present(
+            result: meta,
+            vault: vault,
+            commit: { [weak self] options in
+                self?.commitExport(meta, options: options)
+            },
+            cancel: {
+                // Datei bleibt in Downloads — der Nutzer kann sie dort weiter nutzen.
+            }
+        )
+    }
+
+    private func commitExport(_ result: ExportResult, options: ExportCommitOptions) {
+        guard options.target == .vault else { return }
+        do {
+            let receipt = try VaultSink.deliver(result, vault: vault, options: options)
+            lastExportURL = receipt.audio
+            if options.openAfter {
+                NSWorkspace.shared.activateFileViewerSelecting([receipt.audio])
+            }
+        } catch {
+            NSLog("Blitzsprecher: Vault-Ablage fehlgeschlagen — \(error.localizedDescription)")
         }
     }
 }
