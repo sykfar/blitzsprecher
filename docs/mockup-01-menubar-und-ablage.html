@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blitzsprecher – Mockup</title>
+<style>
+  :root {
+    --bg: #f4ede1;        /* Sand */
+    --card: #ffffff;
+    --ink: #1a1a1a;
+    --ink-2: #4a4a4a;
+    --ink-3: #8a8a8a;
+    --line: #e2d8c5;
+    --accent: #2e5e5a;    /* Lagune */
+    --accent-2: #c37a4a;  /* Terra */
+    --pill: #b8a8d6;      /* lila wie Blitztext-Pille */
+    --focus: #e8e0ce;
+    --radius: 10px;
+    --shadow: 0 10px 30px rgba(26,26,26,.08), 0 1px 2px rgba(26,26,26,.06);
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #22211e;
+      --card: #2b2a26;
+      --ink: #ece6d8;
+      --ink-2: #b5afa1;
+      --ink-3: #857f71;
+      --line: #3a3832;
+      --focus: #35332d;
+      --shadow: 0 10px 30px rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Picturefish Sans", "Public Sans", system-ui, sans-serif; }
+  body { padding: 48px 24px 80px; }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+  header { margin: 0 0 32px; }
+  header h1 { margin: 0 0 6px; font-size: 32px; letter-spacing: -0.01em; }
+  header p { margin: 0; color: var(--ink-2); max-width: 60ch; }
+  header .meta { margin-top: 12px; color: var(--ink-3); font-size: 13px; }
+  header .meta code { font-family: var(--mono); background: var(--focus); padding: 1px 6px; border-radius: 4px; }
+
+  .grid { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  .card h2 { margin: 0; padding: 14px 18px; font-size: 13px; font-weight: 600; letter-spacing: .02em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--line); }
+
+  /* Menu bar window */
+  .menubar { padding: 0; }
+  .menubar .titlebar { background: linear-gradient(180deg, var(--card), var(--focus)); padding: 10px 14px; display: flex; gap: 8px; align-items: center; border-bottom: 1px solid var(--line); }
+  .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .dot.r { background: #ff5f57; } .dot.y { background: #febc2e; } .dot.g { background: #28c840; }
+  .menubar .titlebar strong { margin-left: 6px; font-size: 13px; color: var(--ink-2); font-weight: 500; }
+  .menubar .body { padding: 14px; }
+
+  .bubble { display: flex; justify-content: center; margin: 6px 0 14px; }
+  .bubble .btn {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--accent); color: #fff;
+    display: grid; place-items: center; cursor: pointer;
+    box-shadow: 0 6px 16px rgba(46,94,90,.25);
+  }
+  .bubble .btn svg { width: 28px; height: 28px; }
+
+  .mode-list { display: grid; gap: 6px; }
+  .mode { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 8px; cursor: pointer; }
+  .mode:hover { background: var(--focus); }
+  .mode.active { background: var(--focus); outline: 1px solid var(--line); }
+  .mode .ic { width: 22px; height: 22px; color: var(--accent); }
+  .mode .label { line-height: 1.2; }
+  .mode .label .name { font-weight: 600; }
+  .mode .label .hint { color: var(--ink-3); font-size: 12px; }
+  .kbd { font-family: var(--mono); font-size: 11px; color: var(--ink-2); background: var(--focus); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 2px 6px; white-space: nowrap; }
+
+  .last {
+    margin-top: 12px; padding: 10px 12px; background: var(--focus); border-radius: 8px;
+    font-size: 13px; color: var(--ink-2); display: flex; justify-content: space-between; align-items: center;
+  }
+  .last .play { color: var(--accent); font-weight: 600; cursor: pointer; }
+
+  /* Right side: ablage dialog */
+  .ablage .body { padding: 20px; }
+  .ablage h3 { margin: 0 0 4px; font-size: 20px; letter-spacing: -0.01em; }
+  .ablage .sub { color: var(--ink-2); margin-bottom: 18px; }
+
+  .snippet { background: var(--focus); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: var(--ink-2); border-left: 3px solid var(--accent); margin-bottom: 20px; }
+
+  .targets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+  @media (max-width: 680px) { .targets { grid-template-columns: 1fr; } }
+  .target {
+    border: 1px solid var(--line); border-radius: 10px; padding: 14px; cursor: pointer;
+    display: flex; flex-direction: column; gap: 6px; position: relative;
+    transition: transform .08s ease, border-color .08s ease;
+  }
+  .target:hover { border-color: var(--accent); }
+  .target.sel { border-color: var(--accent); background: var(--focus); }
+  .target .ic { color: var(--accent); width: 24px; height: 24px; }
+  .target .name { font-weight: 600; }
+  .target .hint { color: var(--ink-3); font-size: 12px; }
+  .target .check { position: absolute; top: 10px; right: 10px; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--line); background: #fff; }
+  .target.sel .check { background: var(--accent); border-color: var(--accent); }
+  .target.sel .check::after { content: ""; display: block; width: 10px; height: 5px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg); margin: 4px 0 0 3px; }
+
+  .path-row { display: grid; grid-template-columns: 120px 1fr; gap: 10px; align-items: center; margin: 10px 0; font-size: 14px; }
+  .path-row .k { color: var(--ink-3); }
+  .path-row .v { font-family: var(--mono); font-size: 13px; color: var(--ink); background: var(--focus); padding: 6px 10px; border-radius: 6px; }
+
+  .options { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); display: grid; gap: 10px; }
+  .opt { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-2); }
+  .opt input { accent-color: var(--accent); }
+
+  .footer { display: flex; justify-content: space-between; align-items: center; margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .btn-primary, .btn-ghost { font: inherit; padding: 9px 18px; border-radius: 7px; border: 1px solid transparent; cursor: pointer; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #244a47; }
+  .btn-ghost { background: transparent; color: var(--ink-2); }
+  .btn-ghost:hover { background: var(--focus); color: var(--ink); }
+
+  /* Pill overlay */
+  .pill-row { margin-top: 24px; display: flex; justify-content: center; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--pill); color: #22142d;
+    padding: 8px 16px; border-radius: 999px;
+    box-shadow: 0 8px 24px rgba(184,168,214,.4);
+    font-size: 13px; font-weight: 500;
+  }
+  .pill .wave { display: inline-flex; gap: 3px; align-items: center; }
+  .pill .wave span { width: 3px; height: 10px; background: #22142d; border-radius: 2px; animation: wave 1s infinite ease-in-out; }
+  .pill .wave span:nth-child(2) { animation-delay: .1s; height: 14px; }
+  .pill .wave span:nth-child(3) { animation-delay: .2s; height: 8px; }
+  .pill .wave span:nth-child(4) { animation-delay: .3s; height: 16px; }
+  .pill .wave span:nth-child(5) { animation-delay: .4s; height: 11px; }
+  @keyframes wave { 0%, 100% { transform: scaleY(.6); } 50% { transform: scaleY(1); } }
+
+  .caption { text-align: center; color: var(--ink-3); font-size: 12px; margin-top: 8px; }
+
+  footer.notes { margin-top: 48px; color: var(--ink-3); font-size: 13px; max-width: 68ch; }
+  footer.notes p { margin: 6px 0; }
+  footer.notes code { font-family: var(--mono); background: var(--focus); padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Blitzsprecher — Mockup 01</h1>
+  <p>Spiegelbild von Blitztext. Markieren, Shortcut halten, Mac liest vor. Hier siehst du das Menü-Bar-Fenster, die Lesepille und den Ablage-Dialog für den Audio-Export.</p>
+  <div class="meta">Links: Menü-Bar · Rechts: Ablage-Dialog · Unten: Lesepille während der Wiedergabe · Grundlage: <code>cmagnussen/blitztext-app</code></div>
+</header>
+
+<div class="grid">
+
+  <!-- MENU BAR WINDOW -->
+  <div class="card menubar">
+    <div class="titlebar">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <strong>Blitzsprecher</strong>
+    </div>
+    <div class="body">
+      <div class="bubble">
+        <div class="btn" title="Lesen starten">
+          <!-- Phosphor: speaker-high -->
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M155.51 24.81a8 8 0 0 0-8.47.7L77.25 80H32a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h45.25l69.79 54.49A8 8 0 0 0 160 224V32a8 8 0 0 0-4.49-7.19ZM32 96h40v64H32Zm112 111.64L88 164V92L144 48.36Zm54-106.08a40 40 0 0 1 0 52.88 8 8 0 0 1-12-10.58a24 24 0 0 0 0-31.72a8 8 0 0 1 12-10.58ZM248 128a79.9 79.9 0 0 1-20.37 53.34a8 8 0 0 1-11.92-10.67a64 64 0 0 0 0-85.33a8 8 0 1 1 11.92-10.67A79.83 79.83 0 0 1 248 128Z"/></svg>
+        </div>
+      </div>
+
+      <div class="mode-list">
+        <div class="mode active">
+          <svg class="ic" viewBox="0 0 256 256" fill="currentColor"><path d="M240 128a8 8 0 0 1-8 8h-56v56a8 8 0 0 1-16 0v-56h-56a8 8 0 0 1 0-16h56V64a8 8 0 0 1 16 0v56h56a8 8 0 0 1 8 8ZM112 56a8 8 0 0 0-8-8H56v-8a8 8 0 0 0-16 0v8H24a8 8 0 0 0 0 16h8v120H24a8 8 0 0 0 0 16h88a8 8 0 0 0 0-16h-8v-56h8a8 8 0 0 0 0-16h-8V64h8a8 8 0 0 0 8-8Zm-24 8v16H48V64Zm0 32v16H48V96Zm0 32v56H48v-56Z"/></svg>
+          <div class="label"><div class="name">Blitzsprecher</div><div class="hint">Markierten Text vorlesen</div></div>
+          <span class="kbd">fn ⇧</span>
+        </div>
+        <div class="mode">
+          <svg class="ic" viewBox="0 0 256 256" fill="currentColor"><path d="M208 24h-72a16 16 0 0 0-16 16v8h-16a16 16 0 0 0-16 16v8H72a16 16 0 0 0-16 16v8H40a16 16 0 0 0-16 16v96a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-16h16a16 16 0 0 0 16-16v-16h16a16 16 0 0 0 16-16v-16h8a16 16 0 0 0 16-16V40a16 16 0 0 0-16-16Zm-40 184H40v-96h128v96Zm32-32h-16v-80h16Zm32-32h-16V72h16Zm16-32h-8V40h8Z"/></svg>
+          <div class="label"><div class="name">Blitzsprecher+</div><div class="hint">Text erst glätten, dann vorlesen</div></div>
+          <span class="kbd">fn ⌃</span>
+        </div>
+        <div class="mode">
+          <svg class="ic" viewBox="0 0 256 256" fill="currentColor"><path d="M232 112a8 8 0 0 0-8 8v16H176V64a16 16 0 0 0-16-16H96a16 16 0 0 0-16 16v72H32v-16a8 8 0 0 0-16 0v48a8 8 0 0 0 16 0v-16h48v16a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-16h48v16a8 8 0 0 0 16 0v-48a8 8 0 0 0-8-8Zm-72 72H96V64h64v120Z"/></svg>
+          <div class="label"><div class="name">Blitzsprecher 🎧</div><div class="hint">Als Audio-Datei ablegen</div></div>
+          <span class="kbd">fn ⌥</span>
+        </div>
+        <div class="mode">
+          <svg class="ic" viewBox="0 0 256 256" fill="currentColor"><path d="M224 128a96 96 0 1 1-21.07-60L185.07 85.86A72 72 0 1 0 200 128a8 8 0 0 1 16 0 88 88 0 1 1-23-59.4V40a8 8 0 0 1 16 0v40a8 8 0 0 1-8 8h-40a8 8 0 0 1 0-16h21.59A72 72 0 1 0 152 184a8 8 0 0 1 8 8 88 88 0 1 1 64-152 8 8 0 0 1 0 16Z"/></svg>
+          <div class="label"><div class="name">Blitzsprecher 📝</div><div class="hint">Lange Texte: Zusammenfassung vorlesen</div></div>
+          <span class="kbd">fn ⌘</span>
+        </div>
+      </div>
+
+      <div class="last">
+        <span>Zuletzt gelesen: „Der Herbstwald …"</span>
+        <span class="play">▶ Nochmal</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABLAGE DIALOG -->
+  <div class="card ablage">
+    <h2>Ablage — wohin mit dem Audio?</h2>
+    <div class="body">
+      <h3>Hörfassung speichern</h3>
+      <div class="sub">6 Min · 2,4 MB · deutsch · AVSpeech „Anna (Premium)"</div>
+
+      <div class="snippet">„Der Herbstwald riecht nach feuchtem Laub, als ich das Buch aufschlage. Hier beginnt mein Essay über Führung in unsicherem Gelände …"</div>
+
+      <div class="targets">
+        <div class="target sel">
+          <span class="check"></span>
+          <svg class="ic" viewBox="0 0 256 256" fill="currentColor"><path d="M224 48h-96l-18.6-18.6a8 8 0 0 0-5.66-2.34H40A16 16 0 0 0 24 43.31V208a16 16 0 0 0 16 16h184a16 16 0 0 0 16-16V64a16 16 0 0 0-16-16Zm0 160H40V43.31l16 16A8 8 0 0 0 61.66 64H224ZM112 144a8 8 0 0 1 8-8h16v-16a8 8 0 0 1 16 0v16h16a8 8 0 0 1 0 16h-16v16a8 8 0 0 1-16 0v-16h-16a8 8 0 0 1-8-8Z"/></svg>
+          <span class="name">Vault</span>
+          <span class="hint">Als Anhang zur Quellnote, Wikilink in Daily Note</span>
+        </div>
+        <div class="target">
+          <span class="check"></span>
+          <svg class="ic" viewBox="0 0 256 256" fill="currentColor"><path d="M208.3 75.68A59.74 59.74 0 0 0 202.93 28a7.99 7.99 0 0 0-6.93-4a59.75 59.75 0 0 0-48 24h-24a59.75 59.75 0 0 0-48-24a8 8 0 0 0-6.93 4a59.74 59.74 0 0 0-5.37 47.68A59.9 59.9 0 0 0 56 104v8a56.06 56.06 0 0 0 48.44 55.47A39.8 39.8 0 0 0 96 192v8H72a24 24 0 0 1-24-24a40 40 0 0 0-40-40a8 8 0 0 0 0 16a24 24 0 0 1 24 24a40 40 0 0 0 40 40h24v16a8 8 0 0 0 16 0v-40a24 24 0 0 1 48 0v40a8 8 0 0 0 16 0v-40a39.8 39.8 0 0 0-8.44-24.53A56.06 56.06 0 0 0 216 112v-8a59.9 59.9 0 0 0-7.7-28.32Z"/></svg>
+          <span class="name">GitHub</span>
+          <span class="hint">Release-Asset oder Issue-Anhang in gewähltem Repo</span>
+        </div>
+        <div class="target">
+          <span class="check"></span>
+          <svg class="ic" viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.12 104.12 0 0 0 128 24ZM93.11 196H68a88.14 88.14 0 0 1-26.84-56H68c1.08 15.37 4.37 29.84 9.57 42.68c4.33 10.68 10.26 20.3 17.54 28.32ZM56 108a88.14 88.14 0 0 1 12-32h25.11C85.83 84 79.9 93.62 75.57 104.32C70.37 117.16 67.08 131.63 66 147H41.16A87.9 87.9 0 0 1 56 108Zm72-68a71.9 71.9 0 0 1 17.59 2.08c7.07 1.73 13.52 7.6 18.49 16.42A64.46 64.46 0 0 1 173.37 72H82.63a64.46 64.46 0 0 1 9.29-13.5c5-8.82 11.42-14.69 18.49-16.42A71.9 71.9 0 0 1 128 40Zm0 176a71.9 71.9 0 0 1-17.59-2.08c-7.07-1.73-13.52-7.6-18.49-16.42a64.46 64.46 0 0 1-9.29-13.5h90.76a64.46 64.46 0 0 1-9.29 13.5c-5 8.82-11.42 14.69-18.49 16.42A71.9 71.9 0 0 1 128 216Z"/></svg>
+          <span class="name">Website</span>
+          <span class="hint">Hörfassung auf picturefish.de, Audio-Block im Ghost-Post</span>
+        </div>
+      </div>
+
+      <div class="path-row">
+        <span class="k">Zielpfad</span>
+        <span class="v">07 Anhänge/Audio/2026-10-30 – Der Herbstwald.m4a</span>
+      </div>
+      <div class="path-row">
+        <span class="k">Verlinken in</span>
+        <span class="v">05 Daily Notes/2026-10-30.md</span>
+      </div>
+
+      <div class="options">
+        <label class="opt"><input type="checkbox" checked> Quelltext als Transkript neben die Audio-Datei legen</label>
+        <label class="opt"><input type="checkbox"> Audio nach dem Export in Musik.app öffnen</label>
+        <label class="opt"><input type="checkbox"> Für dieses Dokument merken (nächster Export landet gleich hier)</label>
+      </div>
+
+      <div class="footer">
+        <button class="btn-ghost">Nur vorlesen, nichts speichern</button>
+        <button class="btn-primary">Ablegen</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PILL -->
+<div class="pill-row">
+  <div class="pill">
+    <div class="wave"><span></span><span></span><span></span><span></span><span></span></div>
+    <span>Blitzsprecher liest · 1:23 / 6:04</span>
+    <span style="opacity:.6; margin-left:4px;">× zum Stoppen</span>
+  </div>
+</div>
+<div class="caption">Die lila Lesepille zeigt die Wiedergabe und bleibt klickbar — stoppen, pausieren, wegziehen.</div>
+
+<footer class="notes">
+  <p><strong>Entscheidung, die du mit dem Mockup triffst:</strong> ob die drei Ziele <em>Vault</em>, <em>GitHub</em> und <em>Website</em> gleichberechtigt stehen sollen — oder ob eine Reihenfolge einfacher ist (zum Beispiel: Vault zuerst, der Rest ab Version 1.1).</p>
+  <p><strong>Technisch:</strong> die Lesepipeline läuft lokal über <code>AVSpeechSynthesizer</code> mit System-Stimmen; der <em>+</em>-Modus glättet den Text vorher mit Apple Intelligence; der 🎧-Modus schreibt die Audiosamples direkt in eine <code>.m4a</code>.</p>
+  <p><strong>Rechtlich:</strong> der Produktname „Blitztext" gehört beim Original; Blitzsprecher ist ein eigenständiger Name, aber die MIT-Lizenz, Attribution und ein <code>UPSTREAM.md</code> gehören ins neue Repo.</p>
+</footer>
+
+</div>
+</body>
+</html>
