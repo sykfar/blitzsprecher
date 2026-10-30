@@ -10,7 +10,8 @@ struct BlitzsprecherApp: App {
                 .environment(appState)
                 .frame(width: 320)
         } label: {
-            Image(systemName: "speaker.wave.2.fill")
+            Image("MenuBarIcon")
+                .renderingMode(.template)
         }
         .menuBarExtraStyle(.window)
 

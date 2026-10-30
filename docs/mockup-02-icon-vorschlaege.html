@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blitzsprecher — Icon-Vorschläge</title>
+<link rel="stylesheet" href="fonts/meridian-fonts.css">
+<style>
+:root{
+  --paper:#F2EFE6; --paper-2:#E8E3D5; --card:#FBF9F3;
+  --ink:#1E2B27; --ink-2:#5D6862; --ink-3:#8B948D;
+  --line:#D9D3C3; --line-strong:#C3BCA8;
+  --fathom:#1E5A78; --sienna:#C05B33; --on-fathom:#FBF9F3;
+  --menubar:#2b2a26;
+  --serif:"Meridian Serif",Georgia,serif;
+  --sans:"Meridian Sans",-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:"Meridian Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1714; --paper-2:#142019; --card:#16231E;
+    --ink:#EAE6D8; --ink-2:#93A099; --ink-3:#66736C;
+    --line:#243129; --line-strong:#34433B;
+    --fathom:#6FB3D2; --sienna:#E0885C; --on-fathom:#0D1714;
+    --menubar:#1a1a1a;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);padding:40px 24px 80px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px;font-family:var(--sans)}
+h1{font-family:var(--serif);font-weight:560;font-size:36px;line-height:1.1;letter-spacing:-.01em;margin-bottom:12px}
+.lead{color:var(--ink-2);font-size:16px;max-width:62ch;margin-bottom:36px}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px}
+@media(max-width:720px){.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.grid{grid-template-columns:1fr}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.card .name{font-family:var(--serif);font-weight:560;font-size:17px;line-height:1.2}
+.card .desc{color:var(--ink-2);font-size:13px;line-height:1.45}
+
+/* Vorschau: zeigt das Icon in drei Größen */
+.previews{display:flex;align-items:flex-end;gap:18px;padding:14px 10px;background:var(--paper-2);border-radius:8px;justify-content:center}
+.p-menubar{display:flex;flex-direction:column;align-items:center;gap:6px}
+.p-menubar .bar{background:var(--menubar);border-radius:5px;padding:4px 8px;display:flex;align-items:center;gap:6px}
+.p-menubar .bar svg{width:16px;height:16px;color:#eee}
+.p-menubar .tag{font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:.08em}
+
+.p-circle{display:flex;flex-direction:column;align-items:center;gap:6px}
+.p-circle .btn{width:48px;height:48px;border-radius:50%;background:var(--fathom);color:var(--on-fathom);display:grid;place-items:center}
+.p-circle .btn svg{width:22px;height:22px}
+.p-circle .tag{font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:.08em}
+
+.p-big{display:flex;flex-direction:column;align-items:center;gap:6px}
+.p-big .tile{width:72px;height:72px;border-radius:16px;background:var(--fathom);color:var(--on-fathom);display:grid;place-items:center;box-shadow:0 6px 18px rgba(30,90,120,.3)}
+.p-big .tile svg{width:36px;height:36px}
+.p-big .tag{font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:.08em}
+
+.pick{margin-top:4px;display:flex;align-items:center;justify-content:space-between}
+.pick .label{font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase}
+.pick .num{font-family:var(--serif);font-weight:560;font-size:28px;color:var(--fathom);line-height:1}
+
+.note{margin-top:12px;color:var(--ink-3);font-size:13px;max-width:60ch;line-height:1.5}
+.note code{font-family:var(--mono);font-size:12px;background:var(--paper-2);padding:1px 5px;border-radius:3px}
+
+.row-menubar{margin:28px 0 20px;padding:16px;background:var(--menubar);border-radius:8px;display:flex;align-items:center;gap:18px}
+.row-menubar .caption{color:#aaa;font-family:var(--mono);font-size:11px;letter-spacing:.06em;margin-right:auto}
+.row-menubar .ic{color:#eee;display:flex;align-items:center;justify-content:center;width:22px;height:22px}
+.row-menubar .ic svg{width:16px;height:16px}
+
+.theme{position:fixed;top:14px;right:16px;display:flex;gap:4px}
+.theme button{background:transparent;border:1px solid var(--line-strong);color:var(--ink-2);padding:4px 10px;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:11px}
+.theme button.on{background:var(--fathom);color:var(--on-fathom);border-color:var(--fathom)}
+</style>
+</head>
+<body>
+<div class="theme">
+  <button id="lb" class="on">Hell</button>
+  <button id="db">Dunkel</button>
+</div>
+
+<div class="wrap">
+<div class="eyebrow">Mockup 02 · Icon</div>
+<h1>Welches Icon trägt Blitzsprecher in der Menü-Bar?</h1>
+<p class="lead">Sieben Varianten. Jede zeigt sich dreifach: links wie sie klein in der Menü-Bar aussieht, mittig als Lesen-Blase im Fenster, rechts als App-Kachel in größerem Maßstab. Alle Entwürfe sind monochrome Vektoren und laufen in Hell und Dunkel. Sag die Nummer, dann baue ich sie ein.</p>
+
+<div class="row-menubar">
+  <span class="caption">ALLE SIEBEN AUF EINEN BLICK IN DER MENÜ-BAR:</span>
+  <span class="ic" title="1">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4"/><path d="M7 7v10"/><path d="M11 4v16"/><path d="M15 7v10"/><path d="M19 10v4"/></svg>
+  </span>
+  <span class="ic" title="2">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 2 4 13h5l-1 9 7-11h-5l1-9z"/></svg>
+  </span>
+  <span class="ic" title="3">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16l5-4h11a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1z"/><path d="M9 10h2"/><path d="M13 10h2"/><path d="M8 13h6"/></svg>
+  </span>
+  <span class="ic" title="4">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h4l5 4V6L7 10zM16.5 8.5a4 4 0 0 1 0 7l-1.1-1.5a2 2 0 0 0 0-4z"/><path d="M18 3l-3 5h2.5l-1 3L20 6h-2.5z"/></svg>
+  </span>
+  <span class="ic" title="5">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 10v4"/><path d="M12 7v10"/><path d="M16 10v4"/></svg>
+  </span>
+  <span class="ic" title="6">
+    <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-6l-5 4V7z"/><path fill="#2b2a26" d="M9 10h.01M12 10h.01M15 10h.01" stroke="#2b2a26" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="11" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="15" cy="11" r="1.2"/></svg>
+  </span>
+  <span class="ic" title="7">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M8 12v6"/><path d="M12 12v8"/><path d="M16 12v4"/></svg>
+  </span>
+</div>
+
+<div class="grid">
+  <!-- 1 -->
+  <div class="card">
+    <div class="pick"><span class="label">Variante</span><span class="num">1</span></div>
+    <div class="name">Fünf Striche</div>
+    <div class="desc">Reine Audiowelle, fünf Balken. Klar, abstrakt, visuell direkt mit der Lesepille verwandt — dort pulsen fünf Striche.</div>
+    <div class="previews">
+      <div class="p-menubar"><div class="bar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 10v4"/><path d="M7 7v10"/><path d="M11 4v16"/><path d="M15 7v10"/><path d="M19 10v4"/></svg></div><span class="tag">MENÜ-BAR</span></div>
+      <div class="p-circle"><div class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 10v4"/><path d="M7 7v10"/><path d="M11 4v16"/><path d="M15 7v10"/><path d="M19 10v4"/></svg></div><span class="tag">BLASE</span></div>
+      <div class="p-big"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 10v4"/><path d="M7 7v10"/><path d="M11 4v16"/><path d="M15 7v10"/><path d="M19 10v4"/></svg></div><span class="tag">KACHEL</span></div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card">
+    <div class="pick"><span class="label">Variante</span><span class="num">2</span></div>
+    <div class="name">Blitz allein</div>
+    <div class="desc">Markenlogik aus dem Namen — Blitz-tex-t und Blitz-sprech-er teilen den Blitz. Mutig, aber bedeutungsarm für „sprechen".</div>
+    <div class="previews">
+      <div class="p-menubar"><div class="bar"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 2 4 13h5l-1 9 7-11h-5l1-9z"/></svg></div><span class="tag">MENÜ-BAR</span></div>
+      <div class="p-circle"><div class="btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 2 4 13h5l-1 9 7-11h-5l1-9z"/></svg></div><span class="tag">BLASE</span></div>
+      <div class="p-big"><div class="tile"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 2 4 13h5l-1 9 7-11h-5l1-9z"/></svg></div><span class="tag">KACHEL</span></div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card">
+    <div class="pick"><span class="label">Variante</span><span class="num">3</span></div>
+    <div class="name">Sprechblase mit Zeilen</div>
+    <div class="desc">Spiegel zu Blitztexts Sprechblase: dort Mikrofon, hier Zeilen — als Zeichen für „Text im Chat". Eng mit der Blitztext-Familie verwandt.</div>
+    <div class="previews">
+      <div class="p-menubar"><div class="bar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16l5-4h11a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1z"/><path d="M9 10h2"/><path d="M13 10h2"/><path d="M8 13h6"/></svg></div><span class="tag">MENÜ-BAR</span></div>
+      <div class="p-circle"><div class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16l5-4h11a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1z"/><path d="M9 10h2"/><path d="M13 10h2"/><path d="M8 13h6"/></svg></div><span class="tag">BLASE</span></div>
+      <div class="p-big"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16l5-4h11a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1z"/><path d="M9 10h2"/><path d="M13 10h2"/><path d="M8 13h6"/></svg></div><span class="tag">KACHEL</span></div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card">
+    <div class="pick"><span class="label">Variante</span><span class="num">4</span></div>
+    <div class="name">Lautsprecher mit Blitz</div>
+    <div class="desc">Zwei Zeichen eng übereinander: Lautsprecher für „spricht", Blitz als Markenanker. Erzählt den ganzen Namen, braucht aber klein etwas Raum.</div>
+    <div class="previews">
+      <div class="p-menubar"><div class="bar"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h4l5 4V6L7 10zM16.5 8.5a4 4 0 0 1 0 7l-1.1-1.5a2 2 0 0 0 0-4z"/><path d="M18 3l-3 5h2.5l-1 3L20 6h-2.5z"/></svg></div><span class="tag">MENÜ-BAR</span></div>
+      <div class="p-circle"><div class="btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h4l5 4V6L7 10zM16.5 8.5a4 4 0 0 1 0 7l-1.1-1.5a2 2 0 0 0 0-4z"/><path d="M18 3l-3 5h2.5l-1 3L20 6h-2.5z"/></svg></div><span class="tag">BLASE</span></div>
+      <div class="p-big"><div class="tile"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h4l5 4V6L7 10zM16.5 8.5a4 4 0 0 1 0 7l-1.1-1.5a2 2 0 0 0 0-4z"/><path d="M18 3l-3 5h2.5l-1 3L20 6h-2.5z"/></svg></div><span class="tag">KACHEL</span></div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card">
+    <div class="pick"><span class="label">Variante</span><span class="num">5</span></div>
+    <div class="name">Welle im Kreis</div>
+    <div class="desc">Drei Striche in einem Rahmen — kompakte Form, die auf jeder Fläche wie ein Button wirkt. Lesbar auch bei 16pt.</div>
+    <div class="previews">
+      <div class="p-menubar"><div class="bar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 10v4"/><path d="M12 7v10"/><path d="M16 10v4"/></svg></div><span class="tag">MENÜ-BAR</span></div>
+      <div class="p-circle"><div class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 10v4"/><path d="M12 7v10"/><path d="M16 10v4"/></svg></div><span class="tag">BLASE</span></div>
+      <div class="p-big"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 10v4"/><path d="M12 7v10"/><path d="M16 10v4"/></svg></div><span class="tag">KACHEL</span></div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="card">
+    <div class="pick"><span class="label">Variante</span><span class="num">6</span></div>
+    <div class="name">Sprechblase mit Punkten</div>
+    <div class="desc">Weiche Form, drei Punkte als Zeichen für „spricht gleich". Ruhig und freundlich — passt zum Meridian-Charakter.</div>
+    <div class="previews">
+      <div class="p-menubar"><div class="bar"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-6l-5 4V7z"/></svg></div><span class="tag">MENÜ-BAR</span></div>
+      <div class="p-circle"><div class="btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-6l-5 4V7z"/></svg></div><span class="tag">BLASE</span></div>
+      <div class="p-big"><div class="tile"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-6l-5 4V7z"/></svg></div><span class="tag">KACHEL</span></div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="card">
+    <div class="pick"><span class="label">Variante</span><span class="num">7</span></div>
+    <div class="name">Welle unter Kuppel</div>
+    <div class="desc">Ein Bogen (Himmel, Raum) über drei abnehmenden Strichen — stilles Bild einer Stimme, die unter einem Dach spricht. Eigenständig.</div>
+    <div class="previews">
+      <div class="p-menubar"><div class="bar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M8 12v6"/><path d="M12 12v8"/><path d="M16 12v4"/></svg></div><span class="tag">MENÜ-BAR</span></div>
+      <div class="p-circle"><div class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M8 12v6"/><path d="M12 12v8"/><path d="M16 12v4"/></svg></div><span class="tag">BLASE</span></div>
+      <div class="p-big"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M8 12v6"/><path d="M12 12v8"/><path d="M16 12v4"/></svg></div><span class="tag">KACHEL</span></div>
+    </div>
+  </div>
+
+</div>
+
+<p class="note">Alle Icons sind monochrom (eine Farbe + transparent) und lassen sich in SwiftUI entweder als SF-Symbol-Variante oder — besser für die Markenbildung — als eigenes SVG unter <code>Resources/Assets.xcassets</code> einbinden. Die drei Striche in Variante 1 und 5 spiegeln bewusst die fünf Pulse der Lesepille.</p>
+
+</div>
+
+<script>
+const root = document.documentElement;
+document.getElementById('lb').addEventListener('click', e => { root.setAttribute('data-theme','light'); e.target.classList.add('on'); document.getElementById('db').classList.remove('on'); });
+document.getElementById('db').addEventListener('click', e => { root.setAttribute('data-theme','dark'); e.target.classList.add('on'); document.getElementById('lb').classList.remove('on'); });
+</script>
+</body>
+</html>
