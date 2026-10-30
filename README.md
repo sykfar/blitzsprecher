@@ -28,11 +28,38 @@ verlässt das Gerät.
 
 ## Status
 
-**Konzept.** Es gibt ein Mockup und ein Produktkonzept, noch keinen Swift-Code.
-Die Entwicklung startet, sobald die Richtung aus dem Mockup bestätigt ist.
+**Grundgerüst.** Das Xcode-Projekt baut, die Menü-Bar-App startet und spricht
+einen Beispielsatz. Lesepille, Hotkeys und Selection-Reader sind als Stubs
+angelegt; die reale Pipeline folgt in kleinen Schritten.
 
-- [Mockup 01 — Menü-Bar und Ablage](docs/mockup-01-menubar-und-ablage.html)
+- [Mockup 01 — Menü-Bar und Ablage](docs/mockup-01-menubar-und-ablage.html) (Meridian-Design)
 - [Attribution und Vorlage](UPSTREAM.md)
+
+### Selbst bauen
+
+```bash
+brew install xcodegen
+git clone https://github.com/sykfar/blitzsprecher.git
+cd blitzsprecher
+./build.sh --run
+```
+
+Braucht Xcode 16 oder neuer und macOS 14. `build.sh` erzeugt eine ad-hoc
+signierte Debug-App und startet sie optional. Veröffentlichung braucht eine
+eigene Developer-ID-Signierung und Notarisierung.
+
+```text
+BlitzsprecherMac/
+  App/            BlitzsprecherApp, AppState
+  Features/       MenuBar, Settings
+  Services/       SpeechService, SelectionReader, HotkeyService
+  Resources/      Info.plist, Entitlements, Assets.xcassets
+  Tests/          Unit-Tests
+BlitzsprecherShared/
+  Design/         MeridianTokens (Farben, Typografie, Spacing)
+project.yml       xcodegen-Spec
+build.sh          lokaler Build
+```
 
 ## Idee
 
@@ -64,6 +91,17 @@ Der 🎧-Modus kann die Hörfassung an drei Ziele legen:
   Hörfassung eines Essays.
 
 Für Version 1 steht der Vault im Mittelpunkt. GitHub und Website folgen.
+
+## Design — Meridian
+
+Farben, Schriften und Formen stammen aus **Interview Studio** (einer anderen
+Apple-App aus dem gleichen Haus). Das Design heißt dort *Meridian* und ist
+eine bewusste Ausnahme vom Hausdesign: Fraunces für das Vorgelesene und
+Überschriften, Public Sans für die Bedienung, IBM Plex Mono für Pfade.
+Paper als Fläche, Fathom-Blau als Lesen-Signal, Sienna als Warnung.
+
+Die Design-Tokens leben in
+[`BlitzsprecherShared/Design/MeridianTokens.swift`](BlitzsprecherShared/Design/MeridianTokens.swift).
 
 ## Vorlage und Dank
 

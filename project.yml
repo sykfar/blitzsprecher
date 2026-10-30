@@ -1,0 +1,57 @@
+name: Blitzsprecher
+
+options:
+  bundleIdPrefix: eu.picturefish
+  deploymentTarget:
+    macOS: "14.0"
+  developmentLanguage: de
+  xcodeVersion: "16.0"
+  generateEmptyDirectories: true
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.10"
+    SWIFT_STRICT_CONCURRENCY: complete
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    ENABLE_HARDENED_RUNTIME: YES
+    DEAD_CODE_STRIPPING: YES
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_IDENTITY: "-"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  Blitzsprecher:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: BlitzsprecherMac
+        excludes:
+          - "Tests/**"
+      - path: BlitzsprecherShared
+    resources:
+      - path: BlitzsprecherMac/Resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: eu.picturefish.blitzsprecher
+        PRODUCT_NAME: Blitzsprecher
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_PREVIEWS: YES
+        INFOPLIST_FILE: BlitzsprecherMac/Resources/Info.plist
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks"
+    entitlements:
+      path: BlitzsprecherMac/Resources/Blitzsprecher.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+        com.apple.security.network.client: false
+
+  BlitzsprecherTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: BlitzsprecherMac/Tests
+    dependencies:
+      - target: Blitzsprecher
