@@ -30,5 +30,7 @@
   <string>MIT © 2026 Alexander Sorge · auf Grundlage von Blitztext (cmagnussen, MIT)</string>
   <key>NSAppleEventsUsageDescription</key>
   <string>Blitzsprecher liest den markierten Text in anderen Programmen vor.</string>
+  <key>ATSApplicationFontsPath</key>
+  <string>Fonts/</string>
 </dict>
 </plist>

@@ -96,9 +96,15 @@ Für Version 1 steht der Vault im Mittelpunkt. GitHub und Website folgen.
 
 Farben, Schriften und Formen stammen aus **Interview Studio** (einer anderen
 Apple-App aus dem gleichen Haus). Das Design heißt dort *Meridian* und ist
-eine bewusste Ausnahme vom Hausdesign: Fraunces für das Vorgelesene und
-Überschriften, Public Sans für die Bedienung, IBM Plex Mono für Pfade.
-Paper als Fläche, Fathom-Blau als Lesen-Signal, Sienna als Warnung.
+eine bewusste Ausnahme vom Hausdesign: **Meridian Serif** für das Vorgelesene
+und Überschriften, **Meridian Sans** für die Bedienung, **Meridian Mono** für
+Pfade. Paper als Fläche, Fathom-Blau als Lesen-Signal, Sienna als Warnung.
+
+Die drei Meridian-Familien sind OFL-Derivate aus Fraunces, Public Sans und
+IBM Plex Mono. Sie werden lokal gebaut (nicht vom Google-CDN geladen) im
+Repo [`picturefish-meridian-fonts`](https://github.com/sykfar/picturefish-meridian-fonts)
+und als TTFs in `BlitzsprecherMac/Resources/Fonts/` ausgeliefert; das Mockup
+nutzt die WOFF2-Spiegelung in `docs/fonts/`.
 
 Die Design-Tokens leben in
 [`BlitzsprecherShared/Design/MeridianTokens.swift`](BlitzsprecherShared/Design/MeridianTokens.swift).

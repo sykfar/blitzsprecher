@@ -29,21 +29,21 @@ public enum Meridian {
         public static let risk       = adaptive(light: rgb(0.659, 0.227, 0.220), dark: rgb(0.878, 0.478, 0.416))
     }
 
-    /// Typografie. Die Schriften (Fraunces, Public Sans, IBM Plex Mono) stehen unter
-    /// OFL 1.1 und sollen mit der App ausgeliefert werden. Solange sie noch nicht
-    /// gebundelt sind, fallen `.custom`-Fonts automatisch auf die System-Schrift
-    /// zurück — das Grundgerüst sieht gut aus, nur eben noch in SF statt Fraunces.
+    /// Typografie. Die Meridian-Schriften (Serif, Sans, Mono) sind OFL-Derivate
+    /// aus `picturefish-meridian-fonts` und werden lokal im App-Bundle unter
+    /// `Resources/Fonts/` ausgeliefert; `ATSApplicationFontsPath` im `Info.plist`
+    /// registriert sie beim Start. Fallbacks: System-Serif, SF Pro, SF Mono.
     public enum Typo {
         public static func serif(_ size: CGFloat, weight: Font.Weight = .medium) -> Font {
-            .custom("Fraunces-\(weight.ps)", size: size, relativeTo: .body)
+            .custom("MeridianSerif-\(weight.ps)", size: size, relativeTo: .body)
         }
 
         public static func sans(_ size: CGFloat, weight: Font.Weight = .regular) -> Font {
-            .custom("PublicSans-\(weight.ps)", size: size, relativeTo: .body)
+            .custom("MeridianSans-\(weight.ps)", size: size, relativeTo: .body)
         }
 
         public static func mono(_ size: CGFloat) -> Font {
-            .custom("IBMPlexMono-Regular", size: size, relativeTo: .body)
+            .custom("MeridianMono-Regular", size: size, relativeTo: .body)
         }
     }
 
@@ -74,18 +74,13 @@ private func adaptive(light: NSColor, dark: NSColor) -> Color {
 }
 
 private extension Font.Weight {
+    /// Meridian liefert Regular, Medium und SemiBold aus. Jeder andere Weight
+    /// wird auf Regular gemappt, damit `.custom` nicht ins Leere greift.
     var ps: String {
         switch self {
-        case .thin:        "Thin"
-        case .ultraLight:  "ExtraLight"
-        case .light:       "Light"
-        case .regular:     "Regular"
-        case .medium:      "Medium"
-        case .semibold:    "SemiBold"
-        case .bold:        "Bold"
-        case .heavy:       "ExtraBold"
-        case .black:       "Black"
-        default:           "Regular"
+        case .medium:   "Medium"
+        case .semibold: "SemiBold"
+        default:        "Regular"
         }
     }
 }
